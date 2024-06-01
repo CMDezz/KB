@@ -5,6 +5,12 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
+	_ "github.com/lib/pq"
+
+	"github.com/CMDezz/KB/infras/apis"
 	"github.com/CMDezz/KB/infras/connection"
 	"github.com/CMDezz/KB/infras/logger"
 	"github.com/CMDezz/KB/utils"
@@ -31,7 +37,7 @@ func main() {
 	logger.NewLogger(config.LoggerPath, config.Enviroment)
 
 	/* ---------------------------------- */
-	/*         //init DB connections         */
+	/*         //init DB connections      */
 	/* ---------------------------------- */
 	sqlDBContext, sqlxDBContext := connection.InitializeConnection(config.DbDriver, config.DbSource)
 	//close DB connections on defer
@@ -45,6 +51,12 @@ func main() {
 
 	fmt.Println("Connect to db succesfully")
 
+	/* -------------------------------------------- */
+	/*                init Migrations               */
+	/* -------------------------------------------- */
+	//run db migration
+	runDbMigration(config.MigrationDir, config.DbSource)
+
 	/* ---------------------------------- */
 	/*         //init echo                */
 	/* ---------------------------------- */
@@ -57,4 +69,27 @@ func main() {
 
 	//init echo routes
 
+	// Init docs module
+	apis.Initialize(e, sqlDBContext, sqlxDBContext)
+
+	/* -------------------------------------------- */
+	/*               START APPLICATION              */
+	/* -------------------------------------------- */
+	err = e.Start(config.ServerAddress)
+
+	if err != nil {
+		logger.Error("Cannot start server : ", err)
+		return
+	}
+}
+
+func runDbMigration(dir string, source string) {
+	migration, err := migrate.New(dir, source)
+	if err != nil {
+		log.Fatal("Cannot create migration: ", err)
+	}
+	if err = migration.Up(); err != nil && err != migrate.ErrNoChange {
+		log.Fatal("Cannot migrate db: ", err)
+	}
+	fmt.Println("Migrate succesfully")
 }

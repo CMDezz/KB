@@ -2,7 +2,7 @@ package constants
 
 const (
 	LogBackEndPrefix          string = "[BACKEND]"
-	LogBackEndModulePrefix    string = "[thichlab_docs_v1]"
+	LogBackEndModulePrefix    string = "[KB_V1]"
 	LogBackEndMainInfoPrefix  string = "[Main_Info]"
 	LogBackEndMainErrorPrefix string = "[Main_Error]"
 	LogBackEndMainWarnPrefix  string = "[Main_Warn]"
