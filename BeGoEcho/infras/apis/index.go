@@ -32,5 +32,9 @@ func initRoutes(e *echo.Echo) {
 
 	//Public
 	routes.POST("CreateDiscount", Controller.CreateDiscount)
+	routes.GET("GetAllDiscount", Controller.GetAllDiscount)
+	routes.GET("GetDiscountById/:id", Controller.GetDiscountById)
+	routes.PUT("UpdateDiscountById", Controller.UpdateDiscountById)
+	routes.DELETE("DeleteDiscountById/:id", Controller.DeleteDiscountById)
 	//Private
 }

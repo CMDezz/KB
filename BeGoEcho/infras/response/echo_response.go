@@ -1,9 +1,11 @@
 package response
 
 import (
-	"fmt"
+	"database/sql"
 	"net/http"
 
+	"github.com/CMDezz/KB/gerror"
+	"github.com/CMDezz/KB/utils"
 	"github.com/labstack/echo/v4"
 )
 
@@ -35,8 +37,17 @@ func (baseReponse *BaseResponse) StatusNotFound(context echo.Context, mess strin
 	return baseReponse.StatusErrorResponse(context, http.StatusNotFound, mess, err)
 }
 
-func (baseReponse *BaseResponse) Testz(context echo.Context, mess string) string {
-	// _, response := NewErrorResponse(http.StatusNotFound, mess, exception)
-	// return baseReponse.StatusErrorResponse(context, response)
-	return fmt.Sprintf(mess)
+func (baseReponse *BaseResponse) StatusError(context echo.Context, err error) error {
+	if err == sql.ErrNoRows {
+		message, resp := NewErrorResponse(gerror.ErrorNotFound, err.Error(), utils.FuncName())
+		return baseReponse.StatusErrorResponse(context, http.StatusNotFound, message, resp)
+	}
+
+	message, resp := NewErrorResponse(gerror.ErrorInternal, err.Error(), utils.FuncName())
+	return baseReponse.StatusErrorResponse(context, http.StatusInternalServerError, message, resp)
+}
+func (baseReponse *BaseResponse) StatusErrorBadRequest(context echo.Context, err error) error {
+	message, resp := NewErrorResponse(gerror.ErrorBadRequest, err.Error(), utils.FuncName())
+
+	return baseReponse.StatusErrorResponse(context, http.StatusBadRequest, message, resp)
 }

@@ -18,5 +18,9 @@ func NewServices(queries queries.IQueries) IServices {
 }
 
 type IServices interface {
-	CreateDiscount(ctx context.Context, discount *dto.CreateDiscountRequest) (*dto.Discount, error)
+	CreateDiscount(ctx context.Context, req *dto.CreateDiscountRequest) (*dto.Discount, error)
+	GetAllDiscount(ctx context.Context) (*[]dto.Discount, error)
+	GetDiscountById(ctx context.Context, id int64) (*dto.Discount, error)
+	UpdateDiscountById(ctx context.Context, req *dto.UpdateDiscountRequest) (*dto.Discount, error)
+	DeleteDiscountById(ctx context.Context, id int64) error
 }

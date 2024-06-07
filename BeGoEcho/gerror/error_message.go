@@ -16,6 +16,12 @@ func StatusText(errorCode uint32) string {
 		return "Failed to retrive data"
 	case ErrorSaveData:
 		return "Failed to save data"
+	case ErrorNotFound:
+		return "Data not found"
+	case ErrorInternal:
+		return "Server error"
+	case ErrorBadRequest:
+		return "Bad request"
 
 	}
 	return "Unknown error"

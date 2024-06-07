@@ -34,4 +34,8 @@ func (postgres *PostgresQueries) HandleError(err error, query string) {
 
 type IQueries interface {
 	DBCreateDiscount(ctx context.Context, discount *dto.Discount) (*dto.Discount, error)
+	DBGetAllDiscount(ctx context.Context) (*[]dto.Discount, error)
+	DBGetDiscountById(ctx context.Context, id int64) (*dto.Discount, error)
+	DBUpdateDiscountById(ctx context.Context, req *dto.Discount) (*dto.Discount, error)
+	DBDeleteDiscountById(ctx context.Context, id int64) error
 }

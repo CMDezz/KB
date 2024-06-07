@@ -25,4 +25,7 @@ const (
 	ErrorConnect     uint32 = 50000
 	ErrorSaveData    uint32 = 50001
 	ErrorRetriveData uint32 = 50002
+	ErrorNotFound    uint32 = 50003
+	ErrorInternal    uint32 = 50004
+	ErrorBadRequest  uint32 = 50005
 )

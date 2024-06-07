@@ -7,6 +7,8 @@ const (
 	StringEmpty string = ""
 )
 
+var TimeEmpty time.Time = time.Time{}
+
 const (
 	PageSizeDefault  = 20
 	PageIndexDefault = 1
