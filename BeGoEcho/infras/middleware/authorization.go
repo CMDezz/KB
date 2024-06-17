@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -28,13 +29,12 @@ func CheckTokenExpiration(next echo.HandlerFunc) echo.HandlerFunc {
 func CheckIsStaff(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(*token.Payload)
-
+	fmt.Println(claims)
 	if claims.Role == constants.ENUM_PER_USER {
 		return errors.New("permission denied")
 	}
 
 	return nil
-
 }
 
 func CheckIsAdmin(c echo.Context) error {

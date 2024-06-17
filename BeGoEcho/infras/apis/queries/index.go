@@ -42,4 +42,10 @@ type IQueries interface {
 	DBGetAllAccount(ctx context.Context) (*[]dto.Account, error)
 	DBCreateAccount(ctx context.Context, account *dto.Account) (*dto.Account, error)
 	DBGetAccountByUsername(ctx context.Context, username string) (*dto.Account, error)
+
+	DBCreateCategory(ctx context.Context, discount *dto.Category) (*dto.Category, error)
+	DBGetAllCategory(ctx context.Context) (*[]dto.Category, error)
+	DBGetCategoryById(ctx context.Context, id int64) (*dto.Category, error)
+	DBUpdateCategoryById(ctx context.Context, req *dto.Category) (*dto.Category, error)
+	DBDeleteCategoryById(ctx context.Context, id int64) error
 }

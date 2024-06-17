@@ -5,7 +5,7 @@ CREATE TABLE "accounts" (
   "email" varchar UNIQUE NOT NULL,
   "is_verified" bool DEFAULT false,
   "full_name" varchar,
-  "phone_float" varchar UNIQUE NOT NULL,
+  "phone_float" varchar UNIQUE,
   "role" int NOT NULL DEFAULT 0,
   "is_deleted" bool NOT NULL DEFAULT false,
   "created_at" timestamptz NOT NULL DEFAULT (now())
@@ -45,8 +45,9 @@ CREATE TABLE "collections" (
 CREATE TABLE "categories" (
   "id" bigserial PRIMARY KEY,
   "name" varchar NOT NULL,
-  "parent" bigint,
-  "children" bigint
+  "parent" bigint DEFAULT null,
+  "is_deleted" bool NOT NULL DEFAULT false,
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "discounts" (
@@ -96,7 +97,7 @@ CREATE TABLE "messages" (
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
-COMMENT ON COLUMN "accounts"."role" IS 'constand: 0-client 1-staff 2-admin';
+COMMENT ON COLUMN "accounts"."role" IS 'constant: 0-client 1-staff 2-admin';
 
 COMMENT ON COLUMN "products"."short_desc" IS 'simple desc at list and detail';
 
@@ -141,8 +142,6 @@ ALTER TABLE "products_categories" ADD FOREIGN KEY ("categories_id") REFERENCES "
 
 
 ALTER TABLE "categories" ADD FOREIGN KEY ("parent") REFERENCES "categories" ("id");
-
-ALTER TABLE "categories" ADD FOREIGN KEY ("children") REFERENCES "categories" ("id");
 
 CREATE TABLE "products_discounts" (
   "products_id" bigserial,

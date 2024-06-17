@@ -14,6 +14,16 @@ type UpdateDiscountRequest struct {
 	BeginAt  *time.Time `json:"begin_at,omitempty"`
 	ExpireAt *time.Time `json:"expire_at,omitempty"`
 }
+type CreateCategoryRequest struct {
+	Name   string `json:"name"`
+	Parent *int64 `json:"parent"`
+}
+type UpdateCategoryRequest struct {
+	Id        int64  `json:"id"`
+	Name      string `json:"name"`
+	Parent    *int64 `json:"parent"`
+	IsDeleted *bool  `json:"is_deleted"`
+}
 
 type GetByIdRequest struct {
 	Id int64 `json:"id"`

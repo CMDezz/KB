@@ -29,4 +29,10 @@ type IServices interface {
 	CreateAccount(ctx context.Context, req *dto.CreateAccountRequest) (*dto.Account, error)
 
 	LoginAccount(ctx context.Context, req *dto.LoginAccountRequest, tokenMaker token.JWTTokenMaker) (string, error)
+
+	CreateCategory(ctx context.Context, req *dto.CreateCategoryRequest) (*dto.Category, error)
+	GetCategoryById(ctx context.Context, id int64) (*dto.Category, error)
+	GetAllCategory(ctx context.Context) (*[]dto.Category, error)
+	UpdateCategoryById(ctx context.Context, req *dto.UpdateCategoryRequest) (*dto.Category, error)
+	DeleteCategoryById(ctx context.Context, id int64) error
 }

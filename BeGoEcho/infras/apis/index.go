@@ -53,13 +53,22 @@ func initRoutes(e *echo.Echo, secretKey string) {
 	privateRoutes.Use(middleware.CheckTokenExpiration)
 
 	//Public
-	routes.POST("CreateDiscount", Controller.CreateDiscount)
-	routes.POST("CreateAccount", Controller.CreateAccount)
+
 	routes.GET("GetAllDiscount", Controller.GetAllDiscount)
 	routes.GET("GetAllAccount", Controller.GetAllAccount)
 	routes.GET("GetDiscountById/:id", Controller.GetDiscountById)
-	routes.PUT("UpdateDiscountById", Controller.UpdateDiscountById)
 	routes.POST("LoginAccount", Controller.LoginAccount)
+	routes.GET("GetAllCategory", Controller.GetAllCategory)
+	routes.GET("GetCategoryById", Controller.GetCategoryById)
+	routes.POST("CreateAccount", Controller.CreateAccount)
+
 	//Private
+	privateRoutes.POST("CreateDiscount", Controller.CreateDiscount)
+	privateRoutes.PUT("UpdateDiscountById", Controller.UpdateDiscountById)
 	privateRoutes.DELETE("DeleteDiscountById/:id", Controller.DeleteDiscountById)
+
+	privateRoutes.POST("CreateCategory", Controller.CreateCategory)
+	privateRoutes.DELETE("DeleteCategoryById", Controller.DeleteCategoryById)
+	privateRoutes.PUT("UpdateCategoryById", Controller.UpdateCategoryById)
+
 }

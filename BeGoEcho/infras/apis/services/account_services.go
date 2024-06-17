@@ -30,8 +30,6 @@ func (services *Services) CreateAccount(ctx context.Context, req *dto.CreateAcco
 	ctx, cancel := context.WithTimeout(ctx, constants.TimeoutServerDefault)
 	defer cancel()
 
-	//TODO : KIỂM TRA QUYỀN
-
 	//TODO: hased password
 	hased_password, err := utils.HashPassword(req.Password)
 	if err != nil {
