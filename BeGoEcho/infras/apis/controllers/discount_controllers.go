@@ -6,6 +6,7 @@ import (
 
 	"github.com/CMDezz/KB/dto"
 	"github.com/CMDezz/KB/gerror"
+	"github.com/CMDezz/KB/infras/middleware"
 	"github.com/CMDezz/KB/infras/response"
 	"github.com/CMDezz/KB/utils"
 	"github.com/labstack/echo/v4"
@@ -17,7 +18,10 @@ func (controllers *Controllers) CreateDiscount(eCtx echo.Context) error {
 	if ctx == nil {
 		ctx = context.Background()
 	}
-
+	err = middleware.CheckIsStaff(eCtx)
+	if err != nil {
+		return controllers.StatusErrorPermission(eCtx, err)
+	}
 	req := new(dto.CreateDiscountRequest)
 
 	err = eCtx.Bind(&req)
@@ -80,7 +84,10 @@ func (controllers *Controllers) UpdateDiscountById(eCtx echo.Context) error {
 	if ctx == nil {
 		ctx = context.Background()
 	}
-
+	err = middleware.CheckIsStaff(eCtx)
+	if err != nil {
+		return controllers.StatusErrorPermission(eCtx, err)
+	}
 	req := new(dto.UpdateDiscountRequest)
 
 	err = eCtx.Bind(&req)
@@ -109,6 +116,11 @@ func (controllers *Controllers) DeleteDiscountById(eCtx echo.Context) error {
 	ctx := eCtx.Request().Context()
 	if ctx == nil {
 		ctx = context.Background()
+	}
+
+	err = middleware.CheckIsStaff(eCtx)
+	if err != nil {
+		return controllers.StatusErrorPermission(eCtx, err)
 	}
 
 	id, err := utils.ToInt64(eCtx.Param("id"))

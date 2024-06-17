@@ -38,4 +38,8 @@ type IQueries interface {
 	DBGetDiscountById(ctx context.Context, id int64) (*dto.Discount, error)
 	DBUpdateDiscountById(ctx context.Context, req *dto.Discount) (*dto.Discount, error)
 	DBDeleteDiscountById(ctx context.Context, id int64) error
+
+	DBGetAllAccount(ctx context.Context) (*[]dto.Account, error)
+	DBCreateAccount(ctx context.Context, account *dto.Account) (*dto.Account, error)
+	DBGetAccountByUsername(ctx context.Context, username string) (*dto.Account, error)
 }

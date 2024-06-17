@@ -52,3 +52,18 @@ func IsZeroTime(v *time.Time) bool {
 	return false
 
 }
+
+func EmptyStringIfNil(v *string) string {
+	if v == nil {
+		return ""
+	}
+	return *v
+}
+
+func EmptyValueIfNil[T any](v *T) T {
+	if v == nil {
+		var zero T
+		return zero
+	}
+	return *v
+}

@@ -70,7 +70,7 @@ func main() {
 	//init echo routes
 
 	// Init docs module
-	apis.Initialize(e, sqlDBContext, sqlxDBContext)
+	apis.Initialize(e, sqlDBContext, sqlxDBContext, config.Secret)
 
 	/* -------------------------------------------- */
 	/*               START APPLICATION              */

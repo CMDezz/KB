@@ -51,3 +51,8 @@ func (baseReponse *BaseResponse) StatusErrorBadRequest(context echo.Context, err
 
 	return baseReponse.StatusErrorResponse(context, http.StatusBadRequest, message, resp)
 }
+func (baseReponse *BaseResponse) StatusErrorPermission(context echo.Context, err error) error {
+	message, resp := NewErrorResponse(gerror.ErrorPermission, err.Error(), utils.FuncName())
+
+	return baseReponse.StatusErrorResponse(context, http.StatusUnauthorized, message, resp)
+}

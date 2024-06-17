@@ -9,6 +9,7 @@ type Config struct {
 	LoggerPath    string `mapstructure:"LOGGER_PATH"`
 	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
 	MigrationDir  string `mapstructure:"MIGRATION_DIR"`
+	Secret        string `mapstructure:"SECRET"`
 }
 
 func LoadConfig(path string) (config Config, err error) {

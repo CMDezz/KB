@@ -22,6 +22,8 @@ func StatusText(errorCode uint32) string {
 		return "Server error"
 	case ErrorBadRequest:
 		return "Bad request"
+	case ErrorPermission:
+		return "Permission denied"
 
 	}
 	return "Unknown error"

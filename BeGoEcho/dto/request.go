@@ -18,3 +18,17 @@ type UpdateDiscountRequest struct {
 type GetByIdRequest struct {
 	Id int64 `json:"id"`
 }
+
+type CreateAccountRequest struct {
+	Username   string  `json:"username"`
+	Password   string  `json:"password"`
+	Email      string  `json:"email"`
+	FullName   *string `json:"full_name"`
+	PhoneFloat *string `json:"phone_float"`
+	Role       *int64  `json:"role"`
+}
+
+type LoginAccountRequest struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}

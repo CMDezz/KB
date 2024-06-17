@@ -14,13 +14,11 @@ func New(code uint32, err error, line string) *Error {
 	}
 }
 
-/** Client-side Error code */
 const (
 	ErrorBindData  uint32 = 40000
 	ErrorValidData uint32 = 40001
 )
 
-/** Client-side Error Code */
 const (
 	ErrorConnect     uint32 = 50000
 	ErrorSaveData    uint32 = 50001
@@ -28,4 +26,5 @@ const (
 	ErrorNotFound    uint32 = 50003
 	ErrorInternal    uint32 = 50004
 	ErrorBadRequest  uint32 = 50005
+	ErrorPermission  uint32 = 50006
 )
