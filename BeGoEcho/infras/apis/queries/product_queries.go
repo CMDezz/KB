@@ -6,6 +6,7 @@ import (
 
 	"github.com/CMDezz/KB/dto"
 	"github.com/CMDezz/KB/utils/constants"
+	"github.com/lib/pq"
 )
 
 func (queries *Queries) DBCreateProduct(ctx context.Context, product *dto.Product) (*dto.Product, error) {
@@ -91,4 +92,69 @@ func (queries *Queries) DBDeleteProductById(ctx context.Context, id int64) error
 	}
 
 	return nil
+}
+func (queries *Queries) DBDeleteVariantById(ctx context.Context, id int64) error {
+	query := fmt.Sprintf("DELETE FROM %v WHERE id=%d;",
+		constants.TableProductVariant, id,
+	)
+
+	_, err := queries.Postgres.SQLxDBContext.ExecContext(ctx, query)
+
+	if err != nil {
+		queries.Postgres.HandleError(err, query)
+		return err
+	}
+
+	return nil
+}
+
+func (queries *Queries) DBCreateProductVariant(ctx context.Context, product *dto.ProductVariant) (*dto.ProductVariant, error) {
+	query := fmt.Sprintf(`INSERT INTO %s (name, img_main, imgs_detail, qty, price,variant_on_product) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+		constants.TableProductVariant,
+	)
+
+	res := dto.ProductVariant{}
+	err := queries.Postgres.SQLxDBContext.QueryRowxContext(ctx, query, product.Name, product.ImgMain, pq.StringArray(product.ImgsDetail), product.Qty, product.Price, product.VariantOnProduct).StructScan(&res)
+
+	if err != nil {
+		queries.Postgres.HandleError(err, query)
+		return nil, err
+	}
+
+	return &res, nil
+}
+func (queries *Queries) DBUpdateVariantById(ctx context.Context, product *dto.ProductVariant) (*dto.ProductVariant, error) {
+	query := fmt.Sprintf(`
+	UPDATE %v
+	SET name = $2, img_main = $3, imgs_detail = $4, qty = $5, price = $6, variant_on_product = $7
+	WHERE id = $1
+	RETURNING *
+`, constants.TableProductVariant)
+
+	res := dto.ProductVariant{}
+	err := queries.Postgres.SQLxDBContext.QueryRowxContext(ctx, query, product.Id, product.Name, product.ImgMain, pq.StringArray(product.ImgsDetail), product.Qty, product.Price, product.VariantOnProduct).StructScan(&res)
+
+	if err != nil {
+		queries.Postgres.HandleError(err, query)
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+func (queries *Queries) DBGetVariantsByProductId(ctx context.Context, id int64) (*[]dto.ProductVariant, error) {
+	query := fmt.Sprintf(`SELECT * FROM %s WHERE variant_on_product=%d`,
+		constants.TableProductVariant, id,
+	)
+
+	var res []dto.ProductVariant
+
+	err := queries.Postgres.SQLxDBContext.SelectContext(ctx, &res, query)
+
+	if err != nil {
+		queries.Postgres.HandleError(err, query)
+		return nil, err
+	}
+
+	return &res, nil
 }

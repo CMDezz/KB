@@ -42,9 +42,9 @@ type IServices interface {
 	UpdateCollectionById(ctx context.Context, req *dto.UpdateCollectionRequest) (*dto.Collection, error)
 	DeleteCollectionById(ctx context.Context, id int64) error
 
-	CreateProduct(ctx context.Context, req *dto.CreateProductRequest) (*dto.Product, error)
+	CreateProduct(ctx context.Context, req *dto.CreateProductRequest) (*dto.ProductWithVariant, error)
 	GetProductById(ctx context.Context, id int64) (*dto.Product, error)
 	GetAllProduct(ctx context.Context) (*[]dto.Product, error)
-	UpdateProductById(ctx context.Context, req *dto.UpdateProductRequest) (*dto.Product, error)
+	UpdateProductById(ctx context.Context, req *dto.UpdateProductRequest) (*dto.ProductWithVariant, error)
 	DeleteProductById(ctx context.Context, id int64) error
 }

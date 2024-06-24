@@ -63,19 +63,38 @@ type UpdateCollectionRequest struct {
 }
 
 type CreateProductRequest struct {
-	Name            string  `json:"name"`
-	ShortDesc       string  `json:"short_desc"`
-	Desc            string  `json:"desc"`
-	Article         *string `json:"article"`
-	DiscountApplied *int64  `json:"discount_applied"`
+	Name            string                         `json:"name"`
+	ShortDesc       string                         `json:"short_desc"`
+	Desc            string                         `json:"desc"`
+	Article         *string                        `json:"article"`
+	DiscountApplied *int64                         `json:"discount_applied"`
+	Variants        *[]CreateProductVariantRequest `json:"variants"`
+}
+
+type CreateProductVariantRequest struct {
+	Name       string   `json:"name"`
+	ImgMain    string   `json:"img_main"`
+	ImgsDetail []string `json:"imgs_detail"`
+	Qty        int      `json:"qty"`
+	Price      float64  `json:"price"`
 }
 
 type UpdateProductRequest struct {
-	Id              int64  `json:"id"`
-	Name            string `json:"name"`
-	ShortDesc       string `json:"short_desc"`
-	Desc            string `json:"desc"`
-	DiscountApplied *int64 `json:"discount_applied"`
-	Article         string `json:"article"`
-	IsDeleted       bool   `json:"is_deleted"`
+	Id              int64                         `json:"id"`
+	Name            string                        `json:"name"`
+	ShortDesc       string                        `json:"short_desc"`
+	Desc            string                        `json:"desc"`
+	DiscountApplied *int64                        `json:"discount_applied"`
+	Article         string                        `json:"article"`
+	IsDeleted       bool                          `json:"is_deleted"`
+	Variants        []UpdateProductVariantRequest `json:"variants"`
+}
+type UpdateProductVariantRequest struct {
+	Id         *int64   `json:"id"`
+	Name       string   `json:"name"`
+	ImgMain    string   `json:"img_main"`
+	ImgsDetail []string `json:"imgs_detail"`
+	Qty        int      `json:"qty"`
+	Price      float64  `json:"price"`
+	IsDeleted  bool     `json:"is_deleted"`
 }

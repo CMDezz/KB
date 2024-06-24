@@ -5,10 +5,11 @@ import (
 
 	"github.com/CMDezz/KB/dto"
 	"github.com/CMDezz/KB/infras/logger"
+	"github.com/CMDezz/KB/utils"
 	"github.com/CMDezz/KB/utils/constants"
 )
 
-func (services *Services) CreateProduct(ctx context.Context, req *dto.CreateProductRequest) (*dto.Product, error) {
+func (services *Services) CreateProduct(ctx context.Context, req *dto.CreateProductRequest) (*dto.ProductWithVariant, error) {
 	ctx, cancel := context.WithTimeout(ctx, constants.TimeoutRequestDefault)
 	defer cancel()
 
@@ -23,14 +24,38 @@ func (services *Services) CreateProduct(ctx context.Context, req *dto.CreateProd
 		newProduct.DiscountApplied = req.DiscountApplied
 	}
 
-	category, err := services.Queries.DBCreateProduct(ctx, newProduct)
-
+	product, err := services.Queries.DBCreateProduct(ctx, newProduct)
 	if err != nil {
 		logger.Error("SERVICE - CreateProduct - Error: %v", err)
 		return nil, err
 	}
+	res := dto.ProductWithVariant{
+		Product: product,
+	}
 
-	return category, nil
+	var sliceOfVariants []dto.ProductVariant
+	if req.Variants != nil {
+		for _, v := range *req.Variants {
+			newVariant := &dto.ProductVariant{
+				Name:             v.Name,
+				ImgMain:          v.ImgMain,
+				ImgsDetail:       v.ImgsDetail,
+				Qty:              v.Qty,
+				Price:            v.Price,
+				VariantOnProduct: product.Id,
+			}
+			_, err := services.Queries.DBCreateProductVariant(ctx, newVariant)
+			if err != nil {
+				logger.Error("SERVICE - CreateProduct - Error: %v", err)
+				return nil, err
+			}
+			sliceOfVariants = append(sliceOfVariants, *newVariant)
+		}
+	}
+
+	res.Variants = &sliceOfVariants
+
+	return &res, nil
 }
 
 func (services *Services) GetAllProduct(ctx context.Context) (*[]dto.Product, error) {
@@ -61,7 +86,7 @@ func (services *Services) GetProductById(ctx context.Context, id int64) (*dto.Pr
 
 }
 
-func (services *Services) UpdateProductById(ctx context.Context, req *dto.UpdateProductRequest) (*dto.Product, error) {
+func (services *Services) UpdateProductById(ctx context.Context, req *dto.UpdateProductRequest) (*dto.ProductWithVariant, error) {
 	ctx, cancel := context.WithTimeout(ctx, constants.TimeoutRequestDefault)
 	defer cancel()
 
@@ -82,13 +107,68 @@ func (services *Services) UpdateProductById(ctx context.Context, req *dto.Update
 	newProduct.CreatedAt = product.CreatedAt
 	newProduct.IsDeleted = product.IsDeleted
 
-	res, err := services.Queries.DBUpdateProductById(ctx, &newProduct)
+	result, err := services.Queries.DBUpdateProductById(ctx, &newProduct)
 
 	if err != nil {
 		logger.Error("SERVICE - GetProductById - Error %v", err)
 		return nil, err
 	}
-	return res, nil
+
+	response := dto.ProductWithVariant{
+		Product: result,
+	}
+
+	var sliceOfVariants []dto.ProductVariant
+
+	oldVariants, err := services.Queries.DBGetVariantsByProductId(ctx, product.Id)
+	if err != nil {
+		logger.Error("SERVICE - GetProductById - Error %v", err)
+		return nil, err
+	}
+
+	var tempStoringId []int64
+
+	for _, v := range req.Variants {
+		newVariant := &dto.ProductVariant{
+			Name:             v.Name,
+			ImgMain:          v.ImgMain,
+			ImgsDetail:       v.ImgsDetail,
+			Qty:              v.Qty,
+			Price:            v.Price,
+			VariantOnProduct: product.Id,
+		}
+		if v.Id != nil { //update old variant
+			newVariant.Id = *v.Id
+			_, err := services.Queries.DBUpdateVariantById(ctx, newVariant)
+			if err != nil {
+				logger.Error("SERVICE - CreateProduct - Error: %v", err)
+				return nil, err
+			}
+			tempStoringId = append(tempStoringId, *v.Id)
+		} else { // create new variant
+			_, err := services.Queries.DBCreateProductVariant(ctx, newVariant)
+			if err != nil {
+				logger.Error("SERVICE - CreateProduct - Error: %v", err)
+				return nil, err
+			}
+		}
+		sliceOfVariants = append(sliceOfVariants, *newVariant)
+	}
+
+	//clean unupdate variants
+	for _, oldV := range *oldVariants {
+		if !utils.Includes(tempStoringId, oldV.Id) {
+			err := services.Queries.DBDeleteVariantById(ctx, oldV.Id)
+			if err != nil {
+				logger.Error("SERVICE - CreateProduct - Error: %v", err)
+				return nil, err
+			}
+		}
+	}
+
+	response.Variants = &sliceOfVariants
+
+	return &response, nil
 
 }
 

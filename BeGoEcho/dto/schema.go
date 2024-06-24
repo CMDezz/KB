@@ -2,6 +2,8 @@ package dto
 
 import (
 	"time"
+
+	"github.com/lib/pq"
 )
 
 type Discount struct {
@@ -54,4 +56,19 @@ type Product struct {
 	Article         string    `json:"article" db:"article"`
 	IsDeleted       bool      `json:"is_deleted" db:"is_deleted"`
 	CreatedAt       time.Time `json:"created_at" db:"created_at"`
+}
+type ProductVariant struct {
+	Id               int64    `json:"id" db:"id"`
+	Name             string   `json:"name" db:"name"`
+	ImgMain          string   `json:"img_main" db:"img_main"`
+	ImgsDetail       pq.StringArray `json:"imgs_detail" db:"imgs_detail"`
+	Qty              int      `json:"qty" db:"qty"`
+	Price            float64  `json:"price" db:"price"`
+	VariantOnProduct int64    `json:"variant_on_product" db:"variant_on_product"`
+	IsDeleted        bool     `json:"is_deleted" db:"is_deleted"`
+}
+
+type ProductWithVariant struct {
+	*Product
+	Variants *[]ProductVariant
 }

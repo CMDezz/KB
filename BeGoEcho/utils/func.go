@@ -67,3 +67,12 @@ func EmptyValueIfNil[T any](v *T) T {
 	}
 	return *v
 }
+
+func Includes[T comparable](a []T, v T) bool {
+	for _, t := range a {
+		if t == v {
+			return true
+		}
+	}
+	return false
+}

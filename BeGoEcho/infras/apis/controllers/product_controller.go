@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/CMDezz/KB/dto"
 	"github.com/CMDezz/KB/gerror"
@@ -92,13 +93,8 @@ func (controllers *Controllers) UpdateProductById(eCtx echo.Context) error {
 
 	err = eCtx.Bind(&req)
 
-	// if utils.IsZeroTime(req.BeginAt) {
-	// 	return controllers.StatusErrorBadRequest(eCtx, errors.New("beging_at field is required"))
-	// }
-	// if utils.IsZeroTime(req.ExpireAt) {
-	// 	return controllers.StatusErrorBadRequest(eCtx, errors.New("beging_at field is required"))
-	// }
 	if err != nil {
+		fmt.Println("hahah 1", err)
 		return controllers.StatusErrorBadRequest(eCtx, err)
 	}
 

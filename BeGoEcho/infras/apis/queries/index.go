@@ -60,4 +60,8 @@ type IQueries interface {
 	DBGetProductById(ctx context.Context, id int64) (*dto.Product, error)
 	DBUpdateProductById(ctx context.Context, req *dto.Product) (*dto.Product, error)
 	DBDeleteProductById(ctx context.Context, id int64) error
+	DBCreateProductVariant(ctx context.Context, product *dto.ProductVariant) (*dto.ProductVariant, error)
+	DBGetVariantsByProductId(ctx context.Context, id int64) (*[]dto.ProductVariant, error)
+	DBUpdateVariantById(ctx context.Context, product *dto.ProductVariant) (*dto.ProductVariant, error)
+	DBDeleteVariantById(ctx context.Context, id int64) error
 }
