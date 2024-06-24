@@ -61,6 +61,11 @@ func initRoutes(e *echo.Echo, secretKey string) {
 	routes.GET("GetAllCategory", Controller.GetAllCategory)
 	routes.GET("GetCategoryById", Controller.GetCategoryById)
 	routes.POST("CreateAccount", Controller.CreateAccount)
+	routes.GET("GetAllCollection", Controller.GetAllCollection)
+	routes.GET("GetCollectionById", Controller.GetCollectionById)
+
+	routes.GET("GetAllProduct", Controller.GetAllProduct)
+	routes.GET("GetProductById", Controller.GetProductById)
 
 	//Private
 	privateRoutes.POST("CreateDiscount", Controller.CreateDiscount)
@@ -71,4 +76,11 @@ func initRoutes(e *echo.Echo, secretKey string) {
 	privateRoutes.DELETE("DeleteCategoryById", Controller.DeleteCategoryById)
 	privateRoutes.PUT("UpdateCategoryById", Controller.UpdateCategoryById)
 
+	privateRoutes.DELETE("DeleteCollectionById", Controller.DeleteCollectionById)
+	privateRoutes.PUT("UpdateCollectionById", Controller.UpdateCollectionById)
+	privateRoutes.POST("CreateCollection", Controller.CreateCollection)
+
+	privateRoutes.DELETE("DeleteProductById", Controller.DeleteProductById)
+	privateRoutes.PUT("UpdateProductById", Controller.UpdateProductById)
+	privateRoutes.POST("CreateProduct", Controller.CreateProduct)
 }

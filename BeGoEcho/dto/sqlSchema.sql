@@ -18,7 +18,8 @@ CREATE TABLE "products" (
   "desc" varchar,
   "article" varchar,
   "is_deleted" bool NOT NULL DEFAULT false,
-  "created_at" timestamptz NOT NULL DEFAULT (now())
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "discount_applied" bigserial DEFAULT null
 );
 
 CREATE TABLE "product_variant" (
@@ -56,7 +57,9 @@ CREATE TABLE "discounts" (
   "begin_at" timestamptz NOT NULL DEFAULT ('0001-01-01 00:00:00Z'),
   "expire_at" timestamptz NOT NULL DEFAULT ('0001-01-01 00:00:00Z'),
   "is_deleted" bool NOT NULL DEFAULT false,
-  "created_at" timestamptz NOT NULL DEFAULT (now())
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "type" int DEFAULT null,
+  "value" float DEFAULT null
 );
 
 CREATE TABLE "orders" (
@@ -76,7 +79,6 @@ CREATE TABLE "order_variants" (
   "id" bigserial PRIMARY KEY,
   "variant" bigint NOT NULL,
   "belong_to_order" bigserial NOT NULL,
-  "discount_applied" bigserial,
   "qty" int NOT NULL DEFAULT 1,
   "summary" float NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
@@ -117,6 +119,8 @@ COMMENT ON COLUMN "collections"."article" IS 'an article introduce about collect
 
 COMMENT ON COLUMN "orders"."order_status" IS 'constant: -1:canceled 0:confirmed 1:pendingPayment 2:shipping 3:shipped';
 
+ALTER TABLE "products" ADD FOREIGN KEY ("discount_applied") REFERENCES "discounts" ("id");
+
 ALTER TABLE "product_variant" ADD FOREIGN KEY ("variant_on_product") REFERENCES "products" ("id");
 
 CREATE TABLE "products_collections" (
@@ -143,33 +147,9 @@ ALTER TABLE "products_categories" ADD FOREIGN KEY ("categories_id") REFERENCES "
 
 ALTER TABLE "categories" ADD FOREIGN KEY ("parent") REFERENCES "categories" ("id");
 
-CREATE TABLE "products_discounts" (
-  "products_id" bigserial,
-  "discounts_id" bigserial,
-  PRIMARY KEY ("products_id", "discounts_id")
-);
-
-ALTER TABLE "products_discounts" ADD FOREIGN KEY ("products_id") REFERENCES "products" ("id");
-
-ALTER TABLE "products_discounts" ADD FOREIGN KEY ("discounts_id") REFERENCES "discounts" ("id");
-
-
-CREATE TABLE "collections_discounts" (
-  "collections_id" bigserial,
-  "discounts_id" bigserial,
-  PRIMARY KEY ("collections_id", "discounts_id")
-);
-
-ALTER TABLE "collections_discounts" ADD FOREIGN KEY ("collections_id") REFERENCES "collections" ("id");
-
-ALTER TABLE "collections_discounts" ADD FOREIGN KEY ("discounts_id") REFERENCES "discounts" ("id");
-
-
 ALTER TABLE "order_variants" ADD FOREIGN KEY ("variant") REFERENCES "product_variant" ("id");
 
 ALTER TABLE "order_variants" ADD FOREIGN KEY ("belong_to_order") REFERENCES "orders" ("id");
-
-ALTER TABLE "order_variants" ADD FOREIGN KEY ("discount_applied") REFERENCES "discounts" ("id");
 
 ALTER TABLE "conversations" ADD FOREIGN KEY ("client_id") REFERENCES "accounts" ("id");
 

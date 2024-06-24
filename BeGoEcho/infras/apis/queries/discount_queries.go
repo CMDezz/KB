@@ -9,12 +9,12 @@ import (
 )
 
 func (queries *Queries) DBCreateDiscount(ctx context.Context, discount *dto.Discount) (*dto.Discount, error) {
-	query := fmt.Sprintf("INSERT INTO %s (name, begin_at, expire_at,is_deleted) VALUES ($1, $2, $3, $4) RETURNING *",
+	query := fmt.Sprintf("INSERT INTO %s (name, begin_at, expire_at,type ,value) VALUES ($1, $2, $3,$4,$5) RETURNING *",
 		constants.TableDiscount,
 	)
 
 	res := dto.Discount{}
-	err := queries.Postgres.SQLxDBContext.QueryRowxContext(ctx, query, discount.Name, discount.BeginAt, discount.ExpireAt, discount.IsDeleted).StructScan(&res)
+	err := queries.Postgres.SQLxDBContext.QueryRowxContext(ctx, query, discount.Name, discount.BeginAt, discount.ExpireAt, discount.Type, discount.Value).StructScan(&res)
 
 	if err != nil {
 		queries.Postgres.HandleError(err, query)
@@ -25,7 +25,7 @@ func (queries *Queries) DBCreateDiscount(ctx context.Context, discount *dto.Disc
 }
 
 func (queries *Queries) DBGetAllDiscount(ctx context.Context) (*[]dto.Discount, error) {
-	query := fmt.Sprintf("SELECT * FROM %v",
+	query := fmt.Sprintf("SELECT * FROM %v;",
 		constants.TableDiscount,
 	)
 
@@ -61,13 +61,13 @@ func (queries *Queries) DBGetDiscountById(ctx context.Context, id int64) (*dto.D
 func (queries *Queries) DBUpdateDiscountById(ctx context.Context, discount *dto.Discount) (*dto.Discount, error) {
 	query := fmt.Sprintf(`
         UPDATE %v
-        SET name = $2, begin_at = $3, expire_at = $4
+        SET name = $2, begin_at = $3, expire_at = $4, type = $5, value = $6
         WHERE id = $1
-        RETURNING id, name, begin_at, expire_at
+        RETURNING *
     `, constants.TableDiscount)
 
 	var res dto.Discount
-	err := queries.Postgres.SQLxDBContext.QueryRowxContext(ctx, query, discount.Id, discount.Name, discount.BeginAt, discount.ExpireAt).StructScan(&res)
+	err := queries.Postgres.SQLxDBContext.QueryRowxContext(ctx, query, discount.Id, discount.Name, discount.BeginAt, discount.ExpireAt, discount.Type, discount.Value).StructScan(&res)
 	if err != nil {
 		queries.Postgres.HandleError(err, query)
 		return nil, err

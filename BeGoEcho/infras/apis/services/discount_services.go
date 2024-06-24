@@ -25,10 +25,11 @@ func (services *Services) CreateDiscount(ctx context.Context, req *dto.CreateDis
 	}
 
 	newDiscount := &dto.Discount{
-		Name:      req.Name,
-		BeginAt:   beginAt,
-		ExpireAt:  expireAt,
-		IsDeleted: req.IsDeleted,
+		Name:     req.Name,
+		BeginAt:  beginAt,
+		ExpireAt: expireAt,
+		Type:     req.Type,
+		Value:    req.Value,
 	}
 
 	discount, err := services.Queries.DBCreateDiscount(ctx, newDiscount)
@@ -97,9 +98,12 @@ func (services *Services) UpdateDiscountById(ctx context.Context, req *dto.Updat
 	} else {
 		newDiscount.ExpireAt = discount.ExpireAt
 	}
+
 	newDiscount.Id = discount.Id
 	newDiscount.IsDeleted = discount.IsDeleted
 	newDiscount.CreatedAt = discount.CreatedAt
+	newDiscount.Type = req.Type
+	newDiscount.Value = req.Value
 
 	res, err := services.Queries.DBUpdateDiscountById(ctx, &newDiscount)
 

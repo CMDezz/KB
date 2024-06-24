@@ -9,6 +9,8 @@ type Discount struct {
 	Name      string    `json:"name" db:"name"`
 	BeginAt   time.Time `json:"begin_at" db:"begin_at"`
 	ExpireAt  time.Time `json:"expire_at" db:"expire_at"`
+	Type      int       `json:"type" db:"type"`
+	Value     float64   `json:"value" db:"value"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	IsDeleted bool      `json:"is_deleted" db:"is_deleted"`
 }
@@ -31,4 +33,25 @@ type Account struct {
 	Role          int64     `json:"role" db:"role"`
 	IsDeleted     bool      `json:"is_deleted" db:"is_deleted"`
 	CreatedAt     time.Time `json:"created_at" db:"created_at"`
+}
+
+type Collection struct {
+	Id        int64     `json:"id" db:"id"`
+	Name      string    `json:"name" db:"name"`
+	ShortDesc string    `json:"short_desc" db:"short_desc"`
+	Desc      string    `json:"desc" db:"desc"`
+	Article   string    `json:"article" db:"article"`
+	IsDeleted bool      `json:"is_deleted" db:"is_deleted"`
+	CreatedAt time.Time `json:"created_at" db:"created_at"`
+}
+
+type Product struct {
+	Id              int64     `json:"id" db:"id"`
+	Name            string    `json:"name" db:"name"`
+	ShortDesc       string    `json:"short_desc" db:"short_desc"`
+	Desc            string    `json:"desc" db:"desc"`
+	DiscountApplied *int64    `json:"discount_applied" db:"discount_applied"`
+	Article         string    `json:"article" db:"article"`
+	IsDeleted       bool      `json:"is_deleted" db:"is_deleted"`
+	CreatedAt       time.Time `json:"created_at" db:"created_at"`
 }

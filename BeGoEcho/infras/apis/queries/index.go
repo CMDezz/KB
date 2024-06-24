@@ -48,4 +48,16 @@ type IQueries interface {
 	DBGetCategoryById(ctx context.Context, id int64) (*dto.Category, error)
 	DBUpdateCategoryById(ctx context.Context, req *dto.Category) (*dto.Category, error)
 	DBDeleteCategoryById(ctx context.Context, id int64) error
+
+	DBCreateCollection(ctx context.Context, discount *dto.Collection) (*dto.Collection, error)
+	DBGetAllCollection(ctx context.Context) (*[]dto.Collection, error)
+	DBGetCollectionById(ctx context.Context, id int64) (*dto.Collection, error)
+	DBUpdateCollectionById(ctx context.Context, req *dto.Collection) (*dto.Collection, error)
+	DBDeleteCollectionById(ctx context.Context, id int64) error
+
+	DBCreateProduct(ctx context.Context, discount *dto.Product) (*dto.Product, error)
+	DBGetAllProduct(ctx context.Context) (*[]dto.Product, error)
+	DBGetProductById(ctx context.Context, id int64) (*dto.Product, error)
+	DBUpdateProductById(ctx context.Context, req *dto.Product) (*dto.Product, error)
+	DBDeleteProductById(ctx context.Context, id int64) error
 }

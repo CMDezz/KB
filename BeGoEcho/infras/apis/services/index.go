@@ -35,4 +35,16 @@ type IServices interface {
 	GetAllCategory(ctx context.Context) (*[]dto.Category, error)
 	UpdateCategoryById(ctx context.Context, req *dto.UpdateCategoryRequest) (*dto.Category, error)
 	DeleteCategoryById(ctx context.Context, id int64) error
+
+	CreateCollection(ctx context.Context, req *dto.CreateCollectionRequest) (*dto.Collection, error)
+	GetCollectionById(ctx context.Context, id int64) (*dto.Collection, error)
+	GetAllCollection(ctx context.Context) (*[]dto.Collection, error)
+	UpdateCollectionById(ctx context.Context, req *dto.UpdateCollectionRequest) (*dto.Collection, error)
+	DeleteCollectionById(ctx context.Context, id int64) error
+
+	CreateProduct(ctx context.Context, req *dto.CreateProductRequest) (*dto.Product, error)
+	GetProductById(ctx context.Context, id int64) (*dto.Product, error)
+	GetAllProduct(ctx context.Context) (*[]dto.Product, error)
+	UpdateProductById(ctx context.Context, req *dto.UpdateProductRequest) (*dto.Product, error)
+	DeleteProductById(ctx context.Context, id int64) error
 }
