@@ -1,0 +1,39 @@
+@font-face {
+    font-family: "Arimo";
+    src: url('@/assets/fonts/Arimo-Regular.ttf');
+}
+
+@font-face {
+    font-family: "Arimo Bold";
+    src: url('@/assets/fonts/Arimo-Bold.ttf');
+}
+
+@font-face {
+    font-family: "Arimo Bold Italic";
+    src: url('@/assets/fonts/Arimo-BoldItalic.ttf');
+}
+
+@font-face {
+    font-family: "Arimo Italic";
+    src: url('@/assets/fonts/Arimo-Italic.ttf');
+}
+
+@font-face {
+    font-family: "Arimo-Medium";
+    src: url('@/assets/fonts/Arimo-Medium.ttf');
+}
+
+@font-face {
+    font-family: "Arimo Medium Italic";
+    src: url('@/assets/fonts/Arimo-MediumItalic.ttf');
+}
+
+@font-face {
+    font-family: "Arimo Semibold";
+    src: url('@/assets/fonts/Arimo-SemiBold.ttf');
+}
+
+@font-face {
+    font-family: "Arimo Semibold Italic";
+    src: url('@/assets/fonts/Arimo-SemiBoldItalic.ttf');
+}
